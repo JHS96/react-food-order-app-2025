@@ -10,7 +10,7 @@ export default function Meals() {
     <section id='meals'>
       {availableMeals &&
         availableMeals.map((mealItem) => {
-          return <MealItem key={mealItem.name} name={mealItem.name} />;
+          return <MealItem key={mealItem.id} mealItem={mealItem} />;
         })}
 
       {!availableMeals && <p>No available meals...</p>}
