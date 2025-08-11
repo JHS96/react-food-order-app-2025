@@ -1,4 +1,4 @@
-export default function MainHeader({ count }) {
+export default function MainHeader({ count, openModal }) {
   return (
     <header id='main-header'>
       <div id='title'>
@@ -6,7 +6,7 @@ export default function MainHeader({ count }) {
         <h1>Reactfood</h1>
       </div>
       <div>
-        <button id='cart-btn' onClick={() => console.log('Cart btn clicked')}>
+        <button id='cart-btn' onClick={openModal}>
           Cart <span>({count || 0})</span>
         </button>
       </div>
