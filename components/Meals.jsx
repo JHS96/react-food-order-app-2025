@@ -1,6 +1,11 @@
-import MealItem from './MealItem';
+import { useContext } from 'react';
 
-export default function Meals({ availableMeals }) {
+import MealItem from './MealItem';
+import { MealsContext } from '../src/store/meals-context';
+
+export default function Meals() {
+  const { availableMeals } = useContext(MealsContext);
+
   return (
     <section id='meals'>
       {availableMeals &&

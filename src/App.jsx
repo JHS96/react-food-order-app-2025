@@ -1,11 +1,14 @@
 import MainHeader from '../components/MainHeader';
 import Meals from '../components/Meals';
+import MealsContextProvider from './store/meals-context';
 
 function App() {
   return (
     <>
-      <MainHeader />;
-      <Meals availableMeals={[{ name: 'Pizza' }, { name: 'Nachos' }]} />
+      <MealsContextProvider>
+        <MainHeader />;
+        <Meals />
+      </MealsContextProvider>
     </>
   );
 }
