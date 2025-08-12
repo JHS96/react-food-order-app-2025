@@ -1,4 +1,12 @@
+import { useContext } from 'react';
+
+import { MealsContext } from '../src/store/meals-context';
+
 export default function MainHeader({ count, openModal }) {
+  const { selectedMeals } = useContext(MealsContext);
+
+  const mealsCount = selectedMeals.length;
+
   return (
     <header id='main-header'>
       <div id='title'>
@@ -7,7 +15,7 @@ export default function MainHeader({ count, openModal }) {
       </div>
       <div>
         <button id='cart-btn' onClick={openModal}>
-          Cart <span>({count || 0})</span>
+          Cart <span>({mealsCount})</span>
         </button>
       </div>
     </header>

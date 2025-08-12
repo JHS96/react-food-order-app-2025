@@ -1,4 +1,4 @@
-export default function MealItem({ mealItem }) {
+export default function MealItem({ mealItem, handleClick }) {
   return (
     <div className='meal-item'>
       <article>
@@ -13,7 +13,7 @@ export default function MealItem({ mealItem }) {
         <div className='meal-item-actions'>
           <button
             className='button'
-            onClick={() => console.log(`Add to Cart: ${mealItem.name}`)}
+            onClick={() => handleClick(mealItem, 'add')}
           >
             Add to Cart
           </button>

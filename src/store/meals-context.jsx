@@ -6,6 +6,7 @@ export const MealsContext = createContext({
 
 export default function MealsContextProvider({ children }) {
   const [availableMeals, setAvailableMeals] = useState([]);
+  const [selectedMeals, setSelectedMeals] = useState([]);
 
   useEffect(() => {
     async function getAvailableMeals() {
@@ -24,7 +25,19 @@ export default function MealsContextProvider({ children }) {
     getAvailableMeals();
   }, []);
 
-  const ctxValue = { availableMeals };
+  function addOrRemoveMealItem(mealItem, action) {
+    if (action === 'add') {
+      setSelectedMeals((prevAddedMealItems) => [
+        ...prevAddedMealItems,
+        mealItem,
+      ]);
+    }
+    if (action === 'remove') {
+      // ... remove meal item
+    }
+  }
+
+  const ctxValue = { availableMeals, addOrRemoveMealItem, selectedMeals };
 
   return (
     <MealsContext.Provider value={ctxValue}>{children}</MealsContext.Provider>
