@@ -7,6 +7,7 @@ export const MealsContext = createContext({
 export default function MealsContextProvider({ children }) {
   const [availableMeals, setAvailableMeals] = useState([]);
   const [selectedMeals, setSelectedMeals] = useState([]);
+  const [orderTotal, setOrderTotal] = useState(0);
 
   useEffect(() => {
     async function getAvailableMeals() {
@@ -25,13 +26,16 @@ export default function MealsContextProvider({ children }) {
     getAvailableMeals();
   }, []);
 
-  const totalPrice = useRef(0);
-  const orderPrice = totalPrice.current;
-  useEffect(() => {
-    for (const item of selectedMeals) {
-      totalPrice.current += Number(item.price);
-    }
-  }, [selectedMeals]);
+  // const totalPrice = useRef(0);
+  // const orderPrice = totalPrice.current;
+  // useEffect(() => {
+  //   let total = 0;
+  //   for (const item of selectedMeals) {
+  //     // totalPrice.current += Number(item.price);
+  //     total += Number(item.price);
+  //   }
+  //   setOrderPrice(total);
+  // }, [selectedMeals]);
 
   function addOrRemoveMealItem(mealItem, action) {
     const mealIdx = selectedMeals.findIndex((item) => item.id === mealItem.id);
@@ -53,6 +57,8 @@ export default function MealsContextProvider({ children }) {
           mealItem,
         ]);
       }
+
+      setOrderTotal((prevTotal) => prevTotal + Number(mealItem.price));
     }
     if (action === 'remove') {
       // ... remove meal item
@@ -63,7 +69,7 @@ export default function MealsContextProvider({ children }) {
     availableMeals,
     addOrRemoveMealItem,
     selectedMeals,
-    orderPrice,
+    orderTotal,
   };
 
   return (

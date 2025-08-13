@@ -5,7 +5,7 @@ import { MealsContext } from '../src/store/meals-context';
 
 export default forwardRef(function Modal(props, ref) {
   const dialog = useRef();
-  const { selectedMeals, orderPrice } = useContext(MealsContext);
+  const { selectedMeals, orderTotal } = useContext(MealsContext);
 
   useImperativeHandle(ref, () => {
     return {
@@ -60,7 +60,7 @@ export default forwardRef(function Modal(props, ref) {
               );
             })}
         </ul>
-        <p className='cart-total'>${orderPrice}</p>
+        <p className='cart-total'>${orderTotal.toFixed(2)}</p>
       </div>
       <div className='modal-actions'>
         <button className='text-button' onClick={handleCloseModal}>
