@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useRef } from 'react';
 
 export const MealsContext = createContext({
   availableMeals: [],
@@ -25,19 +25,46 @@ export default function MealsContextProvider({ children }) {
     getAvailableMeals();
   }, []);
 
+  const totalPrice = useRef(0);
+  const orderPrice = totalPrice.current;
+  useEffect(() => {
+    for (const item of selectedMeals) {
+      totalPrice.current += Number(item.price);
+    }
+  }, [selectedMeals]);
+
   function addOrRemoveMealItem(mealItem, action) {
+    const mealIdx = selectedMeals.findIndex((item) => item.id === mealItem.id);
+
+    if (!mealItem.count) {
+      mealItem.count = 0;
+    }
+
     if (action === 'add') {
-      setSelectedMeals((prevAddedMealItems) => [
-        ...prevAddedMealItems,
-        mealItem,
-      ]);
+      mealItem.count++;
+
+      if (mealItem.count > 1) {
+        const selectedMealsCopy = [...selectedMeals];
+        selectedMealsCopy[mealIdx] = mealItem;
+        setSelectedMeals(selectedMealsCopy);
+      } else {
+        setSelectedMeals((prevAddedMealItems) => [
+          ...prevAddedMealItems,
+          mealItem,
+        ]);
+      }
     }
     if (action === 'remove') {
       // ... remove meal item
     }
   }
 
-  const ctxValue = { availableMeals, addOrRemoveMealItem, selectedMeals };
+  const ctxValue = {
+    availableMeals,
+    addOrRemoveMealItem,
+    selectedMeals,
+    orderPrice,
+  };
 
   return (
     <MealsContext.Provider value={ctxValue}>{children}</MealsContext.Provider>

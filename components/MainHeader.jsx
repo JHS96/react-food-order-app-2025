@@ -5,7 +5,10 @@ import { MealsContext } from '../src/store/meals-context';
 export default function MainHeader({ count, openModal }) {
   const { selectedMeals } = useContext(MealsContext);
 
-  const mealsCount = selectedMeals.length;
+  let mealsCount = 0;
+  for (const item of selectedMeals) {
+    mealsCount += item.count;
+  }
 
   return (
     <header id='main-header'>
