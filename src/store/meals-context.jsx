@@ -53,7 +53,16 @@ export default function MealsContextProvider({ children }) {
       setOrderTotal((prevTotal) => prevTotal + Number(mealItem.price));
     }
     if (action === 'remove') {
-      // ... remove meal item
+      mealItem.count--;
+
+      if (mealItem.count <= 0) {
+        const updatedSelectedMeals = selectedMeals.filter(
+          (item) => item.id !== mealItem.id
+        );
+        setSelectedMeals(updatedSelectedMeals);
+      }
+
+      setOrderTotal((prevOrderTotal) => prevOrderTotal - mealItem.price);
     }
   }
 

@@ -5,7 +5,8 @@ import { MealsContext } from '../src/store/meals-context';
 
 export default forwardRef(function Modal(props, ref) {
   const dialog = useRef();
-  const { selectedMeals, orderTotal } = useContext(MealsContext);
+  const { selectedMeals, orderTotal, addOrRemoveMealItem } =
+    useContext(MealsContext);
 
   useImperativeHandle(ref, () => {
     return {
@@ -22,15 +23,8 @@ export default forwardRef(function Modal(props, ref) {
     dialog.current.close();
   }
 
-  function handleAddOrRemoveMeal(identifier, meal) {
-    if (identifier === 'add') {
-      // +1 meal
-      console.log('Add ' + meal.name);
-    }
-    if (identifier === 'remove') {
-      // -1 meal
-      console.log('Remove ' + meal.name);
-    }
+  function handleAddOrRemoveMeal(action, meal) {
+    addOrRemoveMealItem(meal, action);
   }
 
   return createPortal(
@@ -38,6 +32,7 @@ export default forwardRef(function Modal(props, ref) {
       <h2>Your Cart</h2>
       <div className='cart'>
         <ul>
+          {!selectedMeals.length && 'Your cart is empty...'}
           {selectedMeals.length > 0 &&
             selectedMeals.map((meal) => {
               return (
@@ -60,7 +55,7 @@ export default forwardRef(function Modal(props, ref) {
               );
             })}
         </ul>
-        <p className='cart-total'>${orderTotal.toFixed(2)}</p>
+        <p className='cart-total'>${Math.max(0, orderTotal).toFixed(2)}</p>
       </div>
       <div className='modal-actions'>
         <button className='text-button' onClick={handleCloseModal}>
