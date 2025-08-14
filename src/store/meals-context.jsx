@@ -1,7 +1,10 @@
-import { createContext, useState, useEffect, useRef } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const MealsContext = createContext({
   availableMeals: [],
+  addOrRemoveMealItem: (mealItem, action) => {},
+  selectedMeals: [],
+  orderTotal: 0,
 });
 
 export default function MealsContextProvider({ children }) {
@@ -25,17 +28,6 @@ export default function MealsContextProvider({ children }) {
 
     getAvailableMeals();
   }, []);
-
-  // const totalPrice = useRef(0);
-  // const orderPrice = totalPrice.current;
-  // useEffect(() => {
-  //   let total = 0;
-  //   for (const item of selectedMeals) {
-  //     // totalPrice.current += Number(item.price);
-  //     total += Number(item.price);
-  //   }
-  //   setOrderPrice(total);
-  // }, [selectedMeals]);
 
   function addOrRemoveMealItem(mealItem, action) {
     const mealIdx = selectedMeals.findIndex((item) => item.id === mealItem.id);
