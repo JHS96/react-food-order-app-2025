@@ -131,6 +131,7 @@ h1 {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin: 1rem 0.5rem;
 }
 
 .modal-actions .text-button {
@@ -187,6 +188,10 @@ h1 {
 .cart-item-actions button:active {
   background-color: #1d1a16;
   color: #ffab04;
+}
+
+.inputs {
+  margin-bottom: 1.5rem;
 }
 
 .control {

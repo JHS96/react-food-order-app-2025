@@ -1,12 +1,20 @@
-import { forwardRef, useImperativeHandle, useRef, useContext } from 'react';
+import {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useContext,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import { MealsContext } from '../src/store/meals-context';
+import OrderForm from './OrderForm.jsx';
 
 export default forwardRef(function Modal(props, ref) {
   const dialog = useRef();
   const { selectedMeals, orderTotal, addOrRemoveMealItem } =
     useContext(MealsContext);
+  const [modalMode, setModalMode] = useState('cart');
 
   useImperativeHandle(ref, () => {
     return {
@@ -20,6 +28,7 @@ export default forwardRef(function Modal(props, ref) {
   });
 
   function handleCloseModal() {
+    setModalMode('cart');
     dialog.current.close();
   }
 
@@ -27,8 +36,14 @@ export default forwardRef(function Modal(props, ref) {
     addOrRemoveMealItem(meal, action);
   }
 
-  return createPortal(
-    <dialog className='modal' ref={dialog}>
+  function handleGoToCheckout() {
+    if (selectedMeals.length) {
+      setModalMode('checkout');
+    }
+  }
+
+  let modalContent = (
+    <>
       <h2>Your Cart</h2>
       <div className='cart'>
         <ul>
@@ -61,13 +76,22 @@ export default forwardRef(function Modal(props, ref) {
         <button className='text-button' onClick={handleCloseModal}>
           Close
         </button>
-        <button
-          className='button'
-          onClick={() => console.log('Go to checkout...')}
-        >
+        <button className='button' onClick={handleGoToCheckout}>
           Go to Checkout
         </button>
       </div>
+    </>
+  );
+
+  if (modalMode === 'checkout') {
+    modalContent = (
+      <OrderForm orderTotal={orderTotal} setModalMode={setModalMode} />
+    );
+  }
+
+  return createPortal(
+    <dialog className='modal' ref={dialog}>
+      {modalContent}
     </dialog>,
     document.getElementById('modal')
   );
