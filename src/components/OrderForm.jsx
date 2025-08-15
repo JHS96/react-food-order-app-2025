@@ -1,3 +1,10 @@
+import {
+  isEmail,
+  isEmpty,
+  hasMinLength,
+  isNumber,
+} from '../util/validation.js';
+
 export default function OrderForm({ orderTotal, setModalMode }) {
   function handleGoBack() {
     setModalMode('cart');
@@ -10,24 +17,41 @@ export default function OrderForm({ orderTotal, setModalMode }) {
     const enteredPostalCode = formData.get('postal-code');
     const enteredCity = formData.get('city');
 
-    // validate formData
+    let errors = {};
+
+    if (isEmpty(enteredName) || !hasMinLength(enteredName, 1)) {
+      errors.name = 'Your full name must be at least 1 character.';
+    }
+
+    if (!isEmail(enteredEmail) || isEmpty(enteredEmail)) {
+      errors.email = 'Please provide a valid email address.';
+    }
+
+    if (!hasMinLength(enteredStreet, 2)) {
+      errors.street = 'Your street name must be at least 2 characters.';
+    }
+
+    if (!hasMinLength(enteredPostalCode, 4) || !isNumber(enteredPostalCode)) {
+      errors.postalCode = 'Please enter a valid postal code.';
+    }
+
+    if (!hasMinLength(enteredCity, 2)) {
+      errors.city = 'Your city name must be at least 2 characters.';
+    }
+
+    console.log(errors);
+
     // don't clear form if submit is attempted but form is invalid
     // submit form if valid
     // close form after valid submission
     // clear state in context after valid submission
-
-    console.log(enteredName);
-    console.log(enteredEmail);
-    console.log(enteredStreet);
-    console.log(enteredPostalCode);
-    console.log(enteredCity);
   }
 
   return (
     <>
       <h2>Checkout</h2>
       <p>Total Amount: ${Math.max(0, orderTotal).toFixed(2)}</p>
-      <form action={orderAction}>
+      <form action={orderAction} noValidate>
         <div className='inputs'>
           <div className='control'>
             <label htmlFor='name'>Full Name</label>
