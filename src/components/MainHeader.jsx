@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { MealsContext } from '../src/store/meals-context';
+import { MealsContext } from '../store/meals-context.jsx';
 
 export default function MainHeader({ count, openModal }) {
   const { selectedMeals } = useContext(MealsContext);

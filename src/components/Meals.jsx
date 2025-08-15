@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import MealItem from './MealItem';
-import { MealsContext } from '../src/store/meals-context';
+import MealItem from './MealItem.jsx';
+import { MealsContext } from '../store/meals-context.jsx';
 
 export default function Meals() {
   const { availableMeals, addOrRemoveMealItem } = useContext(MealsContext);

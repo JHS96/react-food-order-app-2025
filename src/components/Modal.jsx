@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { MealsContext } from '../src/store/meals-context';
+import { MealsContext } from '../store/meals-context.jsx';
 import OrderForm from './OrderForm.jsx';
 
 export default forwardRef(function Modal(props, ref) {

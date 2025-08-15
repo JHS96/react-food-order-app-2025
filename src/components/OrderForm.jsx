@@ -53,7 +53,7 @@ export default function OrderForm({ orderTotal, setModalMode }) {
           </div>
         </div>
         <div className='modal-actions'>
-          <button className='text-button' onClick={handleGoBack}>
+          <button type='reset' className='text-button' onClick={handleGoBack}>
             Go Back
           </button>
           <button className='button'>Submit Order</button>
