@@ -11,11 +11,11 @@ import {
 // prevFormState is not needed here, but must be accepted as 1st arg to prevent error. formData must
 // the 2nd arg when using the useActionState hook
 function orderAction(prevFormState, formData) {
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const street = formData.get('street');
-  const postalCode = formData.get('postal-code');
-  const city = formData.get('city');
+  const name = formData.get('name').trim();
+  const email = formData.get('email').trim();
+  const street = formData.get('street').trim();
+  const postalCode = formData.get('postal-code').trim();
+  const city = formData.get('city').trim();
 
   let errors = {};
 
