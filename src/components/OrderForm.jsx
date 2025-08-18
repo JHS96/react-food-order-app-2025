@@ -38,7 +38,6 @@ function orderAction(prevFormState, formData) {
   if (!hasMinLength(city, 2)) {
     errors.city = 'Your city name must be at least 2 characters.';
   }
-  console.log(errors);
   const errorsLength = Object.keys(errors).length;
 
   if (errorsLength > 0) {
@@ -88,6 +87,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
               id='name'
               defaultValue={formState.enteredValues?.name}
             />
+            {formState.errors?.name && (
+              <p className='error'>{formState.errors.name}</p>
+            )}
           </div>
           <div className='control'>
             <label htmlFor='email'>E-Mail Address</label>
@@ -97,6 +99,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
               id='email'
               defaultValue={formState.enteredValues?.email}
             />
+            {formState.errors?.email && (
+              <p className='error'>{formState.errors.email}</p>
+            )}
           </div>
           <div className='control'>
             <label htmlFor='street'>Street</label>
@@ -106,6 +111,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
               id='street'
               defaultValue={formState.enteredValues?.street}
             />
+            {formState.errors?.street && (
+              <p className='error'>{formState.errors.street}</p>
+            )}
           </div>
           <div className='control-row'>
             <div className='control'>
@@ -116,6 +124,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
                 id='postal-code'
                 defaultValue={formState.enteredValues?.postalCode}
               />
+              {formState.errors?.postalCode && (
+                <p className='error'> {formState.errors.postalCode}</p>
+              )}
             </div>
             <div className='control'>
               <label htmlFor='city'>City</label>
@@ -125,6 +136,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
                 id='city'
                 defaultValue={formState.enteredValues?.city}
               />
+              {formState.errors?.city && (
+                <p className='error'>{formState.errors.city}</p>
+              )}
             </div>
           </div>
         </div>
