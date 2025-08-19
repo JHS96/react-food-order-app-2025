@@ -12,7 +12,7 @@ import OrderForm from './OrderForm.jsx';
 
 export default forwardRef(function Modal(props, ref) {
   const dialog = useRef();
-  const { selectedMeals, orderTotal, addOrRemoveMealItem } =
+  const { selectedMeals, orderTotal, addOrRemoveMealItem, resetOrderCtx } =
     useContext(MealsContext);
   const [modalMode, setModalMode] = useState('cart');
 
@@ -40,6 +40,11 @@ export default forwardRef(function Modal(props, ref) {
     if (selectedMeals.length) {
       setModalMode('checkout');
     }
+  }
+
+  function handleCloseModalClearOrder() {
+    resetOrderCtx();
+    handleCloseModal();
   }
 
   let modalContent = (
@@ -86,6 +91,24 @@ export default forwardRef(function Modal(props, ref) {
   if (modalMode === 'checkout') {
     modalContent = (
       <OrderForm orderTotal={orderTotal} setModalMode={setModalMode} />
+    );
+  }
+
+  if (modalMode === 'success') {
+    modalContent = (
+      <>
+        <h2>Success!</h2>
+        <p>Your order was submitted successfully.</p>
+        <p>
+          We will get back to you with more details via email within the next
+          few minutes.
+        </p>
+        <div className='modal-actions'>
+          <button className='button' onClick={handleCloseModalClearOrder}>
+            Okay
+          </button>
+        </div>
+      </>
     );
   }
 

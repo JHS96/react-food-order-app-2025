@@ -4,6 +4,7 @@ export const MealsContext = createContext({
   availableMeals: [],
   addOrRemoveMealItem: (mealItem, action) => {},
   submitOrder: () => {},
+  resetOrderCtx: () => {},
   selectedMeals: [],
   orderTotal: 0,
 });
@@ -68,7 +69,6 @@ export default function MealsContextProvider({ children }) {
   }
 
   async function submitOrder(order) {
-    console.log(JSON.stringify(order));
     try {
       const response = await fetch('http://localhost:3000/orders', {
         method: 'POST',
@@ -77,7 +77,6 @@ export default function MealsContextProvider({ children }) {
         },
         body: JSON.stringify(order),
       });
-      console.log(response);
       if (!response.ok) {
         return { error: { message: 'Something went wrong...' } };
       }
@@ -86,10 +85,16 @@ export default function MealsContextProvider({ children }) {
     }
   }
 
+  function resetOrderCtx() {
+    setSelectedMeals([]);
+    setOrderTotal(0);
+  }
+
   const ctxValue = {
     availableMeals,
     addOrRemoveMealItem,
     submitOrder,
+    resetOrderCtx,
     selectedMeals,
     orderTotal,
   };

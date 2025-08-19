@@ -80,10 +80,9 @@ export default function OrderForm({ orderTotal, setModalMode }) {
       },
     });
 
-    return { errors: null };
+    setModalMode('success');
 
-    // close form after valid submission
-    // clear state in context after valid submission
+    return { errors: null };
   }
 
   function handleGoBack() {
