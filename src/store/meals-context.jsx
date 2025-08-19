@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from 'react';
 export const MealsContext = createContext({
   availableMeals: [],
   addOrRemoveMealItem: (mealItem, action) => {},
+  submitOrder: () => {},
   selectedMeals: [],
   orderTotal: 0,
 });
@@ -66,9 +67,29 @@ export default function MealsContextProvider({ children }) {
     }
   }
 
+  async function submitOrder(order) {
+    console.log(JSON.stringify(order));
+    try {
+      const response = await fetch('http://localhost:3000/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(order),
+      });
+      console.log(response);
+      if (!response.ok) {
+        return { error: { message: 'Something went wrong...' } };
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const ctxValue = {
     availableMeals,
     addOrRemoveMealItem,
+    submitOrder,
     selectedMeals,
     orderTotal,
   };

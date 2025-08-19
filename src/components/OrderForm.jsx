@@ -1,4 +1,4 @@
-import { useActionState } from 'react';
+import { useActionState, useContext } from 'react';
 
 import {
   isEmail,
@@ -6,59 +6,7 @@ import {
   hasMinLength,
   isNumber,
 } from '../util/validation.js';
-
-// formData is automatically passed to the function similar to "event"
-// prevFormState is not needed here, but must be accepted as 1st arg to prevent error. formData must
-// the 2nd arg when using the useActionState hook
-function orderAction(prevFormState, formData) {
-  const name = formData.get('name').trim();
-  const email = formData.get('email').trim();
-  const street = formData.get('street').trim();
-  const postalCode = formData.get('postal-code').trim();
-  const city = formData.get('city').trim();
-
-  let errors = {};
-
-  if (isEmpty(name) || !hasMinLength(name, 1)) {
-    errors.name = 'Your full name must be at least 1 character.';
-  }
-
-  if (!isEmail(email) || isEmpty(email)) {
-    errors.email = 'Please provide a valid email address.';
-  }
-
-  if (!hasMinLength(street, 2)) {
-    errors.street = 'Your street name must be at least 2 characters.';
-  }
-
-  if (!hasMinLength(postalCode, 4) || !isNumber(postalCode)) {
-    errors.postalCode = 'Please enter a valid postal code.';
-  }
-
-  if (!hasMinLength(city, 2)) {
-    errors.city = 'Your city name must be at least 2 characters.';
-  }
-  const errorsLength = Object.keys(errors).length;
-
-  if (errorsLength > 0) {
-    return {
-      errors,
-      enteredValues: {
-        name,
-        email,
-        street,
-        postalCode,
-        city,
-      },
-    };
-  }
-
-  return { errors: null };
-
-  // submit form if valid
-  // close form after valid submission
-  // clear state in context after valid submission
-}
+import { MealsContext } from '../store/meals-context.jsx';
 
 export default function OrderForm({ orderTotal, setModalMode }) {
   // args for useActionState hook: 1st => actionFn to be executed, then 2nd => initial state for in case the actionFn has not been executed yet
@@ -66,7 +14,77 @@ export default function OrderForm({ orderTotal, setModalMode }) {
   // 1st => formState = the state of the form
   // 2nd => formAction = enhanced form of actionFn (orderAction in this case)
   // 3rd => isPending = not yet used here
-  const [formState, formAction] = useActionState(orderAction, { errors: null });
+  const [formState, formAction] = useActionState(orderAction, {
+    errors: null,
+  });
+  const { submitOrder, selectedMeals } = useContext(MealsContext);
+
+  // formData is automatically passed to the function similar to "event"
+  // prevFormState is not needed here, but must be accepted as 1st arg to prevent error. formData must
+  // the 2nd arg when using the useActionState hook
+  function orderAction(prevFormState, formData) {
+    const name = formData.get('name').trim();
+    const email = formData.get('email').trim();
+    const street = formData.get('street').trim();
+    const postalCode = formData.get('postal-code').trim();
+    const city = formData.get('city').trim();
+
+    let errors = {};
+
+    if (isEmpty(name) || !hasMinLength(name, 1)) {
+      errors.name = 'Your full name must be at least 1 character.';
+    }
+
+    if (!isEmail(email) || isEmpty(email)) {
+      errors.email = 'Please provide a valid email address.';
+    }
+
+    if (!hasMinLength(street, 2)) {
+      errors.street = 'Your street name must be at least 2 characters.';
+    }
+
+    if (!hasMinLength(postalCode, 4) || !isNumber(postalCode)) {
+      errors.postalCode = 'Please enter a valid postal code.';
+    }
+
+    if (!hasMinLength(city, 2)) {
+      errors.city = 'Your city name must be at least 2 characters.';
+    }
+
+    const errorsLength = Object.keys(errors).length;
+
+    if (errorsLength > 0) {
+      return {
+        errors,
+        enteredValues: {
+          name,
+          email,
+          street,
+          postalCode,
+          city,
+        },
+      };
+    }
+
+    // Make sure that the arg to this fn is correctly structred or else the weakly written backend may crash
+    submitOrder({
+      order: {
+        items: selectedMeals,
+        customer: {
+          name,
+          email,
+          street,
+          'postal-code': postalCode,
+          city,
+        },
+      },
+    });
+
+    return { errors: null };
+
+    // close form after valid submission
+    // clear state in context after valid submission
+  }
 
   function handleGoBack() {
     setModalMode('cart');
